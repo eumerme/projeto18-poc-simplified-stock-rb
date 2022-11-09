@@ -1,12 +1,24 @@
 import { connection } from "../database/db.js";
-import { Product } from "../protocols/product.js";
+import { InsertProduct } from "../protocols/product.js";
 
-async function insertProduct(product: Product) {
+async function insertProduct(product: InsertProduct) {
 	const { categoryId, name, quantity } = product;
+	return connection.query(`INSERT INTO products ("categoryId", name, quantity) VALUES ($1, $2, $3);`, [
+		categoryId,
+		name,
+		quantity,
+	]);
+}
+
+async function listProducts() {
 	return connection.query(
-		`INSERT INTO products ("categoryId", name, quantity) VALUES ($1, $2, $3);`,
-		[categoryId, name, quantity]
+		`SELECT products.id
+			, products.name
+			, products.quantity
+			, categories."name" AS category
+		FROM products
+		JOIN categories ON products."categoryId" = categories.id;`
 	);
 }
 
-export { insertProduct };
+export { insertProduct, listProducts };
