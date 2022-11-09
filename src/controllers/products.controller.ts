@@ -22,4 +22,14 @@ async function getProducts(req: Request, res: Response) {
 	}
 }
 
-export { createProduct, getProducts };
+async function getProductsByCategory(req: Request, res: Response) {
+	const { category } = req.params;
+	try {
+		const products = (await productsRepository.listProductsByCategory(category)).rows as ListProducts[];
+		return res.status(STATUS_CODE.OK).send(products);
+	} catch (error) {
+		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+	}
+}
+
+export { createProduct, getProducts, getProductsByCategory };

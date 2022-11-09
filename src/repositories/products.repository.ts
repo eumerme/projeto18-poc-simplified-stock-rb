@@ -21,4 +21,17 @@ async function listProducts() {
 	);
 }
 
-export { insertProduct, listProducts };
+async function listProductsByCategory(category: string) {
+	return connection.query(
+		`SELECT products.id
+			, products.name
+			, products.quantity
+			, categories."name" AS category
+		FROM products
+		JOIN categories ON products."categoryId" = categories.id
+		WHERE categories.name LIKE $1;`,
+		[category]
+	);
+}
+
+export { insertProduct, listProducts, listProductsByCategory };
