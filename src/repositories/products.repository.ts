@@ -38,4 +38,8 @@ async function updateProductById(quantity: number, id: number) {
 	return connection.query(`UPDATE products SET quantity = $1 WHERE products.id = $2;`, [quantity, id]);
 }
 
-export { insertProduct, listProducts, listProductsByCategory, updateProductById };
+async function deleteProductById(id: number) {
+	return connection.query(`DELETE FROM products WHERE id = $1;`, [id]);
+}
+
+export { insertProduct, listProducts, listProductsByCategory, updateProductById, deleteProductById };

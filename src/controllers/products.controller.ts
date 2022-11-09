@@ -43,4 +43,14 @@ async function updateProduct(req: Request, res: Response) {
 	}
 }
 
-export { createProduct, getProducts, getProductsByCategory, updateProduct };
+async function deleteProduct(req: Request, res: Response) {
+	const id: number = Number(req.params.id);
+	try {
+		await productsRepository.deleteProductById(id);
+		return res.sendStatus(STATUS_CODE.OK);
+	} catch (error) {
+		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+	}
+}
+
+export { createProduct, getProducts, getProductsByCategory, updateProduct, deleteProduct };
