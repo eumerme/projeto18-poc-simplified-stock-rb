@@ -34,4 +34,8 @@ async function listProductsByCategory(category: string) {
 	);
 }
 
-export { insertProduct, listProducts, listProductsByCategory };
+async function updateProductById(quantity: number, id: number) {
+	return connection.query(`UPDATE products SET quantity = $1 WHERE products.id = $2;`, [quantity, id]);
+}
+
+export { insertProduct, listProducts, listProductsByCategory, updateProductById };

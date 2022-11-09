@@ -23,7 +23,7 @@ async function getProducts(req: Request, res: Response) {
 }
 
 async function getProductsByCategory(req: Request, res: Response) {
-	const { category } = req.params;
+	const category: string = req.params.category;
 	try {
 		const products = (await productsRepository.listProductsByCategory(category)).rows as ListProducts[];
 		return res.status(STATUS_CODE.OK).send(products);
@@ -32,4 +32,15 @@ async function getProductsByCategory(req: Request, res: Response) {
 	}
 }
 
-export { createProduct, getProducts, getProductsByCategory };
+async function updateProduct(req: Request, res: Response) {
+	const quantity: number = req.body.quantity;
+	const id: number = Number(req.params.id);
+	try {
+		await productsRepository.updateProductById(quantity, id);
+		return res.sendStatus(STATUS_CODE.OK);
+	} catch (error) {
+		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+	}
+}
+
+export { createProduct, getProducts, getProductsByCategory, updateProduct };
