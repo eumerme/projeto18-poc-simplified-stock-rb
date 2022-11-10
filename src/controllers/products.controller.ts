@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { STATUS_CODE } from "../enums/status.code.js";
-import { Category, InsertProduct, ListProducts, QueryTotalProducts, TotalProducts } from "../protocols/products.js";
+import { InsertProduct, ListProducts, QueryTotalProducts, TotalProducts } from "../protocols/products.js";
 import * as productsRepository from "../repositories/products.repository.js";
 
 async function createProduct(req: Request, res: Response) {
@@ -61,16 +61,28 @@ async function getProductById(req: Request, res: Response) {
 }
 
 async function totalProducts(req: Request, res: Response) {
-	const query = req.query as Category;
+	try {
+		const totalAvailable = (await productsRepository.totalAllProductsAvailable()).rows[0] as TotalProducts;
+		const totalSold = (await productsRepository.totalAllProductsSold()).rows[0] as TotalProducts;
+
+		const total: number = Number(totalAvailable.total) + Number(totalSold.total);
+		return res.status(STATUS_CODE.OK).send({ total });
+	} catch (error) {
+		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+	}
+}
+
+async function totalProductsAvailable(req: Request, res: Response) {
+	const query = req.query as QueryTotalProducts;
 	try {
 		const category: string = query.category;
 		if (category) {
-			const products = (await productsRepository.totalProductsByCategory(category)).rows[0] as TotalProducts;
-			return res.status(STATUS_CODE.OK).send(products);
+			const total = (await productsRepository.totalProductsByCategoryAvailable(category)).rows[0] as TotalProducts;
+			return res.status(STATUS_CODE.OK).send(total);
 		}
 
-		const products = (await productsRepository.totalAllProducts()).rows[0] as TotalProducts;
-		return res.status(STATUS_CODE.OK).send(products);
+		const total = (await productsRepository.totalAllProductsAvailable()).rows[0] as TotalProducts;
+		return res.status(STATUS_CODE.OK).send(total);
 	} catch (error) {
 		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
 	}
@@ -126,6 +138,7 @@ export {
 	getProductsByCategory,
 	getProductById,
 	totalProducts,
+	totalProductsAvailable,
 	totalProductsSold,
 	updateProduct,
 	deleteProduct,

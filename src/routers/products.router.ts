@@ -6,6 +6,7 @@ import {
 	getProductsByCategory,
 	getProductById,
 	totalProducts,
+	totalProductsAvailable,
 	totalProductsSold,
 	updateProduct,
 	deleteProduct,
@@ -19,6 +20,7 @@ productsRouter.get("/products", getProducts);
 productsRouter.get("/products/:category", getProductsByCategory);
 productsRouter.get("/product/:id", getProductById);
 productsRouter.get("/total-products", totalProducts);
+productsRouter.get("/total-products-available", totalProductsAvailable);
 productsRouter.get("/total-products-sold", totalProductsSold);
 productsRouter.patch("/update-product/:id", updateProduct);
 productsRouter.delete("/delete-product/:id", deleteProduct);

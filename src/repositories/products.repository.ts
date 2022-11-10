@@ -65,11 +65,11 @@ async function selectProductByName(name: string): Promise<QueryResult<ListProduc
 	);
 }
 
-async function totalAllProducts() {
+async function totalAllProductsAvailable() {
 	return connection.query(`SELECT SUM(products.quantity) AS total FROM products;`);
 }
 
-async function totalProductsByCategory(category: string) {
+async function totalProductsByCategoryAvailable(category: string) {
 	return connection.query(
 		`SELECT SUM(products.quantity) AS total
 		FROM products
@@ -122,8 +122,8 @@ export {
 	listProductsByCategory,
 	selectProductByName,
 	selectProductById,
-	totalAllProducts,
-	totalProductsByCategory,
+	totalAllProductsAvailable,
+	totalProductsByCategoryAvailable,
 	totalAllProductsSold,
 	totalProductsSoldByProduct,
 	totalProductsSoldByCategory,

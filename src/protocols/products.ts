@@ -11,8 +11,6 @@ export type ListProducts = {
 	category: string;
 };
 
-export type Category = { category: string };
-
 export type QueryTotalProducts = { category?: string; product?: string };
 
 export type TotalProducts = { total: number };
