@@ -13,6 +13,24 @@ async function createProduct(req: Request, res: Response) {
 	}
 }
 
+async function productSold(req: Request, res: Response) {
+	const name: string = req.body.name;
+	try {
+		await productsRepository.insertSoldProduct(name);
+
+		const product = (await productsRepository.selectProductByName(name)).rows[0];
+		if (product.quantity > 0) {
+			await productsRepository.updateProductQuantity(name);
+		} else {
+			return res.status(STATUS_CODE.BAD_REQUEST).send({ message: "Produto esgotado" });
+		}
+
+		return res.sendStatus(STATUS_CODE.OK);
+	} catch (error) {
+		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+	}
+}
+
 async function getProducts(req: Request, res: Response) {
 	try {
 		const products = (await productsRepository.listProducts()).rows as ListProducts[];
@@ -42,11 +60,28 @@ async function getProductById(req: Request, res: Response) {
 	}
 }
 
+async function totalProducts(req: Request, res: Response) {
+	const query = req.query as Category;
+	try {
+		const category: string = query.category;
+		if (category) {
+			const products = (await productsRepository.totalProductsByCategory(category)).rows[0] as TotalProducts;
+			return res.status(STATUS_CODE.OK).send(products);
+		}
+		const products = (await productsRepository.totalProducts()).rows[0] as TotalProducts;
+		return res.status(STATUS_CODE.OK).send(products);
+	} catch (error) {
+		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+	}
+}
+
 async function updateProduct(req: Request, res: Response) {
 	const quantity: number = req.body.quantity;
 	const id: number = Number(req.params.id);
 	try {
-		await productsRepository.updateProductById(quantity, id);
+		const product = (await productsRepository.selectProductById(id)).rows[0] as ListProducts;
+
+		await productsRepository.updateProduct(quantity, id);
 		return res.sendStatus(STATUS_CODE.OK);
 	} catch (error) {
 		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
@@ -63,27 +98,13 @@ async function deleteProduct(req: Request, res: Response) {
 	}
 }
 
-async function totalProducts(req: Request, res: Response) {
-	const query = req.query as Category;
-	try {
-		const category: string = query.category;
-		if (category) {
-			const products = (await productsRepository.totalProductsByCategory(category)).rows[0] as TotalProducts;
-			return res.status(STATUS_CODE.OK).send(products);
-		}
-		const products = (await productsRepository.totalAllProducts()).rows[0] as TotalProducts;
-		return res.status(STATUS_CODE.OK).send(products);
-	} catch (error) {
-		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
-	}
-}
-
 export {
 	createProduct,
+	productSold,
 	getProducts,
 	getProductsByCategory,
 	getProductById,
+	totalProducts,
 	updateProduct,
 	deleteProduct,
-	totalProducts,
 };
