@@ -1,13 +1,14 @@
 import { Router } from "express";
 import {
 	createProduct,
+	productSold,
 	getProducts,
 	getProductsByCategory,
-	updateProduct,
-	deleteProduct,
 	getProductById,
 	totalProducts,
-	productSold,
+	totalProductsSold,
+	updateProduct,
+	deleteProduct,
 } from "../controllers/products.controller.js";
 
 const productsRouter = Router();
@@ -15,12 +16,11 @@ const productsRouter = Router();
 productsRouter.post("/product", createProduct);
 productsRouter.post("/product-sold", productSold);
 productsRouter.get("/products", getProducts);
-//productsRouter.get("/products-available", getProducts);
 productsRouter.get("/products/:category", getProductsByCategory);
 productsRouter.get("/product/:id", getProductById);
 productsRouter.get("/total-products", totalProducts);
+productsRouter.get("/total-products-sold", totalProductsSold);
 productsRouter.patch("/update-product/:id", updateProduct);
 productsRouter.delete("/delete-product/:id", deleteProduct);
-//productsRouter.get("/total-products-sold", totalProductsSold);
 
 export { productsRouter };

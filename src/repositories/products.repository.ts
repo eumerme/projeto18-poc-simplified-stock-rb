@@ -65,7 +65,7 @@ async function selectProductByName(name: string): Promise<QueryResult<ListProduc
 	);
 }
 
-async function totalProducts() {
+async function totalAllProducts() {
 	return connection.query(`SELECT SUM(products.quantity) AS total FROM products;`);
 }
 
@@ -76,6 +76,30 @@ async function totalProductsByCategory(category: string) {
 		JOIN categories ON products."categoryId" = categories.id
 		WHERE categories.name = $1;`,
 		[category]
+	);
+}
+
+async function totalAllProductsSold() {
+	return connection.query(`SELECT COUNT(sold.name) AS total FROM sold;`);
+}
+
+async function totalProductsSoldByProduct() {
+	return connection.query(
+		`SELECT COUNT(sold.name) AS total
+			, sold.name
+		FROM sold
+		GROUP BY sold.name;`
+	);
+}
+
+async function totalProductsSoldByCategory() {
+	return connection.query(
+		`SELECT COUNT(sold.name) AS total
+			, categories.name AS category
+		FROM sold
+		JOIN products ON sold.name = products.name
+		JOIN categories ON products."categoryId" = categories.id
+		GROUP BY category;`
 	);
 }
 
@@ -98,8 +122,11 @@ export {
 	listProductsByCategory,
 	selectProductByName,
 	selectProductById,
-	totalProducts,
+	totalAllProducts,
 	totalProductsByCategory,
+	totalAllProductsSold,
+	totalProductsSoldByProduct,
+	totalProductsSoldByCategory,
 	updateProduct,
 	updateProductQuantity,
 	deleteProductById,

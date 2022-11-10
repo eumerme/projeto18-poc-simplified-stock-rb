@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { STATUS_CODE } from "../enums/status.code.js";
-import { Category, InsertProduct, ListProducts, TotalProducts } from "../protocols/products.js";
+import { Category, InsertProduct, ListProducts, QueryTotalProducts, TotalProducts } from "../protocols/products.js";
 import * as productsRepository from "../repositories/products.repository.js";
 
 async function createProduct(req: Request, res: Response) {
@@ -68,8 +68,31 @@ async function totalProducts(req: Request, res: Response) {
 			const products = (await productsRepository.totalProductsByCategory(category)).rows[0] as TotalProducts;
 			return res.status(STATUS_CODE.OK).send(products);
 		}
-		const products = (await productsRepository.totalProducts()).rows[0] as TotalProducts;
+
+		const products = (await productsRepository.totalAllProducts()).rows[0] as TotalProducts;
 		return res.status(STATUS_CODE.OK).send(products);
+	} catch (error) {
+		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+	}
+}
+
+async function totalProductsSold(req: Request, res: Response) {
+	const query = req.query as QueryTotalProducts;
+	try {
+		const product: string = query.product;
+		if (product) {
+			const total = (await productsRepository.totalProductsSoldByProduct()).rows as TotalProducts[];
+			return res.status(STATUS_CODE.OK).send(total);
+		}
+
+		const category: string = query.category;
+		if (category) {
+			const total = (await productsRepository.totalProductsSoldByCategory()).rows as TotalProducts[];
+			return res.status(STATUS_CODE.OK).send(total);
+		}
+
+		const total = (await productsRepository.totalAllProductsSold()).rows[0] as TotalProducts;
+		return res.status(STATUS_CODE.OK).send(total);
 	} catch (error) {
 		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
 	}
@@ -79,8 +102,6 @@ async function updateProduct(req: Request, res: Response) {
 	const quantity: number = req.body.quantity;
 	const id: number = Number(req.params.id);
 	try {
-		const product = (await productsRepository.selectProductById(id)).rows[0] as ListProducts;
-
 		await productsRepository.updateProduct(quantity, id);
 		return res.sendStatus(STATUS_CODE.OK);
 	} catch (error) {
@@ -105,6 +126,7 @@ export {
 	getProductsByCategory,
 	getProductById,
 	totalProducts,
+	totalProductsSold,
 	updateProduct,
 	deleteProduct,
 };
