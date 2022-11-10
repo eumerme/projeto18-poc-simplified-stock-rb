@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { STATUS_CODE } from "../enums/status.code.js";
-import { InsertProduct, ListProducts } from "../protocols/product.js";
+import { Category, InsertProduct, ListProducts, TotalProducts } from "../protocols/products.js";
 import * as productsRepository from "../repositories/products.repository.js";
 
 async function createProduct(req: Request, res: Response) {
@@ -32,6 +32,16 @@ async function getProductsByCategory(req: Request, res: Response) {
 	}
 }
 
+async function getProductById(req: Request, res: Response) {
+	const id: number = Number(req.params.id);
+	try {
+		const product = (await productsRepository.selectProductById(id)).rows[0] as ListProducts;
+		return res.status(STATUS_CODE.OK).send(product);
+	} catch (error) {
+		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+	}
+}
+
 async function updateProduct(req: Request, res: Response) {
 	const quantity: number = req.body.quantity;
 	const id: number = Number(req.params.id);
@@ -53,4 +63,27 @@ async function deleteProduct(req: Request, res: Response) {
 	}
 }
 
-export { createProduct, getProducts, getProductsByCategory, updateProduct, deleteProduct };
+async function totalProducts(req: Request, res: Response) {
+	const query = req.query as Category;
+	try {
+		const category: string = query.category;
+		if (category) {
+			const products = (await productsRepository.totalProductsByCategory(category)).rows[0] as TotalProducts;
+			return res.status(STATUS_CODE.OK).send(products);
+		}
+		const products = (await productsRepository.totalAllProducts()).rows[0] as TotalProducts;
+		return res.status(STATUS_CODE.OK).send(products);
+	} catch (error) {
+		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+	}
+}
+
+export {
+	createProduct,
+	getProducts,
+	getProductsByCategory,
+	getProductById,
+	updateProduct,
+	deleteProduct,
+	totalProducts,
+};

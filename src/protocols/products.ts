@@ -10,3 +10,7 @@ export type ListProducts = {
 	quantity: number;
 	category: string;
 };
+
+export type Category = { category: string };
+
+export type TotalProducts = { total: number };
