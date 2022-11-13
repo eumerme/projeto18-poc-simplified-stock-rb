@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { STATUS_CODE } from "../enums/status.code.js";
-import { InsertProduct, ListProducts, QueryTotalProducts, TotalProducts } from "../protocols/products.js";
+import { InsertProduct, ListProducts, ParamsQuery, TotalProducts } from "../protocols/protocols.js";
 import * as productsRepository from "../repositories/products.repository.js";
 
 async function createProduct(req: Request, res: Response) {
@@ -73,7 +73,7 @@ async function totalProducts(req: Request, res: Response) {
 }
 
 async function totalProductsAvailable(req: Request, res: Response) {
-	const query = req.query as QueryTotalProducts;
+	const query = req.query as ParamsQuery;
 	try {
 		const category: string = query.category;
 		if (category) {
@@ -89,11 +89,11 @@ async function totalProductsAvailable(req: Request, res: Response) {
 }
 
 async function totalProductsSold(req: Request, res: Response) {
-	const query = req.query as QueryTotalProducts;
+	const query = req.query as ParamsQuery;
 	try {
 		const product: string = query.product;
 		if (product) {
-			const total = (await productsRepository.totalProductsSoldByProduct()).rows as TotalProducts[];
+			const total = (await productsRepository.totalProductsSoldByName()).rows as TotalProducts[];
 			return res.status(STATUS_CODE.OK).send(total);
 		}
 

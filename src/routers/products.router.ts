@@ -14,15 +14,16 @@ import {
 
 const productsRouter = Router();
 
-productsRouter.post("/product", createProduct);
-productsRouter.post("/product-sold", productSold);
-productsRouter.get("/products", getProducts);
-productsRouter.get("/products/:category", getProductsByCategory);
-productsRouter.get("/product/:id", getProductById);
-productsRouter.get("/total-products", totalProducts);
-productsRouter.get("/total-products-available", totalProductsAvailable);
-productsRouter.get("/total-products-sold", totalProductsSold);
-productsRouter.patch("/update-product/:id", updateProduct);
-productsRouter.delete("/delete-product/:id", deleteProduct);
+productsRouter
+	.post("/product", createProduct)
+	.post("/product-sold", productSold)
+	.get("/products", getProducts)
+	.get("/products/:category", getProductsByCategory)
+	.get("/product/:id", getProductById)
+	.get("/total-products", totalProducts)
+	.get("/total-products-available", totalProductsAvailable)
+	.get("/total-products-sold", totalProductsSold)
+	.patch("/update-product/:id", updateProduct)
+	.delete("/delete-product/:id", deleteProduct);
 
 export { productsRouter };

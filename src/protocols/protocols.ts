@@ -2,7 +2,6 @@ export type InsertProduct = {
 	categoryId: number;
 	name: string;
 	quantity: number;
-	available: boolean;
 };
 
 export type ListProducts = {
@@ -11,6 +10,10 @@ export type ListProducts = {
 	category: string;
 };
 
-export type QueryTotalProducts = { category?: string; product?: string };
+export type ParamsQuery = { category?: string; product?: string };
+
+export type ParamsId = { id: number };
 
 export type TotalProducts = { total: number };
+
+//fazer o schema com joi e terminar de tipar as funções

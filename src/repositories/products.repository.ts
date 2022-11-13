@@ -1,6 +1,6 @@
 import { QueryResult } from "pg";
 import { connection } from "../database/db.js";
-import { InsertProduct, ListProducts } from "../protocols/products.js";
+import { InsertProduct, ListProducts } from "../protocols/protocols.js";
 
 async function insertProduct(product: InsertProduct): Promise<QueryResult<InsertProduct>> {
 	const { categoryId, name, quantity } = product;
@@ -83,7 +83,7 @@ async function totalAllProductsSold() {
 	return connection.query(`SELECT COUNT(sold.name) AS total FROM sold;`);
 }
 
-async function totalProductsSoldByProduct() {
+async function totalProductsSoldByName() {
 	return connection.query(
 		`SELECT COUNT(sold.name) AS total
 			, sold.name
@@ -125,7 +125,7 @@ export {
 	totalAllProductsAvailable,
 	totalProductsByCategoryAvailable,
 	totalAllProductsSold,
-	totalProductsSoldByProduct,
+	totalProductsSoldByName,
 	totalProductsSoldByCategory,
 	updateProduct,
 	updateProductQuantity,
