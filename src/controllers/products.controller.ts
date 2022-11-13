@@ -73,12 +73,12 @@ async function totalProductsAvailable(req: Request, res: Response): Promise<Resp
 	try {
 		const category: string = query.category;
 		if (category) {
-			const total = (await productsRepository.totalProductsByCategoryAvailable(category)).rows[0];
-			return res.status(STATUS_CODE.OK).send(total);
+			const result = (await productsRepository.totalProductsByCategoryAvailable(category)).rows[0];
+			return res.status(STATUS_CODE.OK).send({ total: Number(result.total) });
 		}
 
-		const total = (await productsRepository.totalAllProductsAvailable()).rows[0];
-		return res.status(STATUS_CODE.OK).send(total);
+		const result = (await productsRepository.totalAllProductsAvailable()).rows[0];
+		return res.status(STATUS_CODE.OK).send({ total: Number(result.total) });
 	} catch (error) {
 		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
 	}
@@ -89,12 +89,12 @@ async function totalProductsSold(req: Request, res: Response): Promise<Response>
 	try {
 		const category: string = query.category;
 		if (category) {
-			const total = (await productsRepository.totalProductsSoldByCategory(category)).rows[0];
-			return res.status(STATUS_CODE.OK).send(total);
+			const result = (await productsRepository.totalProductsSoldByCategory(category)).rows[0];
+			return res.status(STATUS_CODE.OK).send({ total: Number(result.total) });
 		}
 
-		const total = (await productsRepository.totalAllProductsSold()).rows[0];
-		return res.status(STATUS_CODE.OK).send(total);
+		const result = (await productsRepository.totalAllProductsSold()).rows[0];
+		return res.status(STATUS_CODE.OK).send({ total: Number(result.total) });
 	} catch (error) {
 		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
 	}

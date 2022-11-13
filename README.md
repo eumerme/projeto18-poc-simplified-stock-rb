@@ -4,7 +4,7 @@ A simplified stock control application.
 
 # About
 
-This project is a simple application that satisfies the needs of Resinas Botânicas virtual store (@resinasbotanicas on instagram).
+This project is a simple application that satisfies the needs of Resinas Botânicas virtual store (@resinasbotanicas on instagram). Also, it's a proof of concept (POC) to get started with typescript.
 
 # How to run
 
@@ -29,9 +29,9 @@ Table "categories" infos:
 
 # API endpoints
 
-## - POST product
+## POST product
 
-### Request
+### - Request
 
 `POST /product`
 
@@ -43,13 +43,13 @@ Table "categories" infos:
 }
 ```
 
-### Response
+### - Response
 
 Status: 201 Created
 
-## - POST sold product
+## POST sold product
 
-### Request
+### - Request
 
 `POST /product-sold`
 
@@ -59,19 +59,19 @@ Status: 201 Created
 }
 ```
 
-### Response
+### - Response
 
 Status: 201 Created
 
-## - GET products
+## GET products
 
-### Request
+### - Request
 
 - All products: `GET /products`
 
 - Products by category: `GET /products?category=brinco`
 
-### Response
+### - Response
 
 - All products
 
@@ -109,13 +109,13 @@ Status: 200 OK
 ]
 ```
 
-## - GET product
+## GET product
 
-### Request
+### - Request
 
 `GET /product/:id`
 
-### Response
+### - Response
 
 Status: 200 OK
 
@@ -128,13 +128,13 @@ Status: 200 OK
 }
 ```
 
-## - GET products
+## GET products
 
-### Request
+### - Request
 
 `GET /products/:id`
 
-### Response
+### - Response
 
 Status: 200 OK
 
@@ -147,15 +147,15 @@ Status: 200 OK
 }
 ```
 
-## - GET total products available
+## GET total products available
 
-### Request
+### - Request
 
 - All products: `GET /total-products-available`
 
 - Products by category: `GET /total-products-available?category=anel`
 
-### Response
+### - Response
 
 - All products
 
@@ -163,7 +163,7 @@ Status: 200 OK
 
 ```json
 {
-	"total": "2"
+	"total": 2
 }
 ```
 
@@ -173,19 +173,19 @@ Status: 200 OK
 
 ```json
 {
-	"total": "0"
+	"total": 0
 }
 ```
 
-## - GET total products sold
+## GET total products sold
 
-### Request
+### - Request
 
 - All products: `GET /total-products-sold`
 
 - Products by category: `GET /total-products-sold?category=anel`
 
-### Response
+### - Response
 
 - All products
 
@@ -193,7 +193,7 @@ Status: 200 OK
 
 ```json
 {
-	"total": "0"
+	"total": 0
 }
 ```
 
@@ -203,13 +203,13 @@ Status: 200 OK
 
 ```json
 {
-	"total": "0"
+	"total": 0
 }
 ```
 
-## - UPDATE product quantity
+## UPDATE product quantity
 
-### Request
+### - Request
 
 `PATCH /update-product`
 
@@ -220,16 +220,16 @@ Status: 200 OK
 }
 ```
 
-### Response
+### - Response
 
 Status: 200 OK
 
-## - DELETE product
+## DELETE product
 
-### Request
+### - Request
 
 `DELETE /delete-product/:id`
 
-### Response
+### - Response
 
 Status: 200 OK
