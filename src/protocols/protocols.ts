@@ -4,13 +4,17 @@ export type InsertProduct = {
 	quantity: number;
 };
 
+export type UpdateProduct = Omit<InsertProduct, "categoryId" | "name">;
+
+export type SoldName = Omit<InsertProduct, "categoryId" | "quantity">;
+
 export type ListProducts = {
 	name: string;
 	quantity: number;
 	category: string;
 };
 
-export type ParamsQuery = { category?: string; product?: string };
+export type QueryCategory = { category: string };
 
 export type ParamsId = { id: number };
 

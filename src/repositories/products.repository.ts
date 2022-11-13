@@ -66,12 +66,12 @@ async function selectProductByName(name: string): Promise<QueryResult<ListProduc
 }
 
 async function totalAllProductsAvailable() {
-	return connection.query(`SELECT SUM(products.quantity) AS total FROM products;`);
+	return connection.query(`SELECT COALESCE(SUM(products.quantity), 0) AS total FROM products;`);
 }
 
 async function totalProductsByCategoryAvailable(category: string) {
 	return connection.query(
-		`SELECT SUM(products.quantity) AS total
+		`SELECT COALESCE(SUM(products.quantity), 0) AS total
 		FROM products
 		JOIN categories ON products."categoryId" = categories.id
 		WHERE categories.name = $1;`,
@@ -83,23 +83,14 @@ async function totalAllProductsSold() {
 	return connection.query(`SELECT COUNT(sold.name) AS total FROM sold;`);
 }
 
-async function totalProductsSoldByName() {
+async function totalProductsSoldByCategory(category: string) {
 	return connection.query(
 		`SELECT COUNT(sold.name) AS total
-			, sold.name
-		FROM sold
-		GROUP BY sold.name;`
-	);
-}
-
-async function totalProductsSoldByCategory() {
-	return connection.query(
-		`SELECT COUNT(sold.name) AS total
-			, categories.name AS category
 		FROM sold
 		JOIN products ON sold.name = products.name
 		JOIN categories ON products."categoryId" = categories.id
-		GROUP BY category;`
+		WHERE categories.name = $1;`,
+		[category]
 	);
 }
 
@@ -125,7 +116,6 @@ export {
 	totalAllProductsAvailable,
 	totalProductsByCategoryAvailable,
 	totalAllProductsSold,
-	totalProductsSoldByName,
 	totalProductsSoldByCategory,
 	updateProduct,
 	updateProductQuantity,

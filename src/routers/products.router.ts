@@ -1,11 +1,11 @@
 import { Router } from "express";
+import { validateBody, validateParams, validateQuery } from "../middlewares/schemas.validation.js";
+import { insertProduct, paramsId, queryCategory, soldName, updateQuantity } from "../schemas/schemas.js";
 import {
 	createProduct,
 	productSold,
 	getProducts,
-	getProductsByCategory,
 	getProductById,
-	totalProducts,
 	totalProductsAvailable,
 	totalProductsSold,
 	updateProduct,
@@ -15,15 +15,13 @@ import {
 const productsRouter = Router();
 
 productsRouter
-	.post("/product", createProduct)
-	.post("/product-sold", productSold)
-	.get("/products", getProducts)
-	.get("/products/:category", getProductsByCategory)
-	.get("/product/:id", getProductById)
-	.get("/total-products", totalProducts)
-	.get("/total-products-available", totalProductsAvailable)
-	.get("/total-products-sold", totalProductsSold)
-	.patch("/update-product/:id", updateProduct)
-	.delete("/delete-product/:id", deleteProduct);
+	.post("/product", validateBody(insertProduct), createProduct)
+	.post("/product-sold", validateBody(soldName), productSold)
+	.get("/products", validateQuery(queryCategory), getProducts)
+	.get("/product/:id", validateParams(paramsId), getProductById)
+	.get("/total-products-available", validateQuery(queryCategory), totalProductsAvailable)
+	.get("/total-products-sold", validateQuery(queryCategory), totalProductsSold)
+	.patch("/update-product/:id", validateParams(paramsId), validateBody(updateQuantity), updateProduct)
+	.delete("/delete-product/:id", validateParams(paramsId), deleteProduct);
 
 export { productsRouter };
