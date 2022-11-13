@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { SoldName, InsertProduct, ParamsId, QueryCategory, UpdateProduct } from "../protocols/protocols.js";
+import { ProductName, InsertProduct, ParamsId, QueryCategory, UpdateProduct } from "../protocols/protocols.js";
 
 const insertProduct = Joi.object<InsertProduct>().keys({
 	categoryId: Joi.number().positive().required(),
@@ -8,10 +8,11 @@ const insertProduct = Joi.object<InsertProduct>().keys({
 });
 
 const updateQuantity = Joi.object<UpdateProduct>().keys({
+	name: Joi.string().trim().required(),
 	quantity: Joi.number().positive().required(),
 });
 
-const soldName = Joi.object<SoldName>().keys({
+const productName = Joi.object<ProductName>().keys({
 	name: Joi.string().trim().required(),
 });
 
@@ -20,7 +21,7 @@ const paramsId = Joi.object<ParamsId>().keys({
 });
 
 const queryCategory = Joi.object<QueryCategory>().keys({
-	category: Joi.string().valid("brinco", "anel", "cordão", "pulseira", "quadro").trim(),
+	category: Joi.string().valid("brinco", "anel", "colar", "pulseira", "quadro").trim(),
 });
 
-export { insertProduct, updateQuantity, soldName, paramsId, queryCategory };
+export { insertProduct, updateQuantity, productName, paramsId, queryCategory };

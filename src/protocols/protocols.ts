@@ -4,9 +4,9 @@ export type InsertProduct = {
 	quantity: number;
 };
 
-export type UpdateProduct = Omit<InsertProduct, "categoryId" | "name">;
+export type UpdateProduct = Omit<InsertProduct, "categoryId">;
 
-export type SoldName = Omit<InsertProduct, "categoryId" | "quantity">;
+export type ProductName = Omit<InsertProduct, "categoryId" | "quantity">;
 
 export type ListProducts = {
 	name: string;
@@ -19,5 +19,3 @@ export type QueryCategory = { category: string };
 export type ParamsId = { id: number };
 
 export type TotalProducts = { total: number };
-
-//fazer o schema com joi e terminar de tipar as funções

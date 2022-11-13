@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { STATUS_CODE } from "../enums/status.code.js";
-import { InsertProduct, ListProducts, QueryCategory, TotalProducts } from "../protocols/protocols.js";
+import { InsertProduct, QueryCategory, UpdateProduct } from "../protocols/protocols.js";
 import * as productsRepository from "../repositories/products.repository.js";
 
-async function createProduct(req: Request, res: Response) {
+async function createProduct(req: Request, res: Response): Promise<Response> {
 	const product = req.body as InsertProduct;
 	try {
 		const nameExists = (await productsRepository.selectProductByName(product.name)).rows[0];
@@ -18,7 +18,7 @@ async function createProduct(req: Request, res: Response) {
 	}
 }
 
-async function productSold(req: Request, res: Response) {
+async function productSold(req: Request, res: Response): Promise<Response> {
 	const name: string = req.body.name;
 	try {
 		const product = (await productsRepository.selectProductByName(name)).rows[0];
@@ -38,26 +38,26 @@ async function productSold(req: Request, res: Response) {
 	}
 }
 
-async function getProducts(req: Request, res: Response) {
+async function getProducts(req: Request, res: Response): Promise<Response> {
 	const query = req.query as QueryCategory;
 	try {
 		const category: string = query.category;
 		if (category) {
-			const products = (await productsRepository.listProductsByCategory(category)).rows as ListProducts[];
+			const products = (await productsRepository.listProductsByCategory(category)).rows;
 			return res.status(STATUS_CODE.OK).send(products);
 		}
 
-		const products = (await productsRepository.listProducts()).rows as ListProducts[];
+		const products = (await productsRepository.listProducts()).rows;
 		return res.status(STATUS_CODE.OK).send(products);
 	} catch (error) {
 		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
 	}
 }
 
-async function getProductById(req: Request, res: Response) {
+async function getProductById(req: Request, res: Response): Promise<Response> {
 	const id: number = Number(req.params.id);
 	try {
-		const product = (await productsRepository.selectProductById(id)).rows[0] as ListProducts;
+		const product = (await productsRepository.selectProductById(id)).rows[0];
 		if (!product) {
 			return res.sendStatus(STATUS_CODE.NOT_FOUND);
 		}
@@ -68,58 +68,58 @@ async function getProductById(req: Request, res: Response) {
 	}
 }
 
-async function totalProductsAvailable(req: Request, res: Response) {
+async function totalProductsAvailable(req: Request, res: Response): Promise<Response> {
 	const query = req.query as QueryCategory;
 	try {
 		const category: string = query.category;
 		if (category) {
-			const total = (await productsRepository.totalProductsByCategoryAvailable(category)).rows[0] as TotalProducts;
+			const total = (await productsRepository.totalProductsByCategoryAvailable(category)).rows[0];
 			return res.status(STATUS_CODE.OK).send(total);
 		}
 
-		const total = (await productsRepository.totalAllProductsAvailable()).rows[0] as TotalProducts;
+		const total = (await productsRepository.totalAllProductsAvailable()).rows[0];
 		return res.status(STATUS_CODE.OK).send(total);
 	} catch (error) {
 		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
 	}
 }
 
-async function totalProductsSold(req: Request, res: Response) {
+async function totalProductsSold(req: Request, res: Response): Promise<Response> {
 	const query = req.query as QueryCategory;
 	try {
 		const category: string = query.category;
 		if (category) {
-			const total = (await productsRepository.totalProductsSoldByCategory(category)).rows[0] as TotalProducts;
+			const total = (await productsRepository.totalProductsSoldByCategory(category)).rows[0];
 			return res.status(STATUS_CODE.OK).send(total);
 		}
 
-		const total = (await productsRepository.totalAllProductsSold()).rows[0] as TotalProducts;
+		const total = (await productsRepository.totalAllProductsSold()).rows[0];
 		return res.status(STATUS_CODE.OK).send(total);
 	} catch (error) {
 		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
 	}
 }
 
-async function updateProduct(req: Request, res: Response) {
-	const quantity: number = req.body.quantity;
-	const id: number = Number(req.params.id);
+async function updateProduct(req: Request, res: Response): Promise<Response> {
+	const body = req.body as UpdateProduct;
+	const { quantity, name } = body;
 	try {
-		const product = (await productsRepository.selectProductById(id)).rows[0] as ListProducts;
+		const product = (await productsRepository.selectProductByName(name)).rows[0];
 		if (!product) {
 			return res.sendStatus(STATUS_CODE.NOT_FOUND);
 		}
 
-		await productsRepository.updateProduct(quantity, id);
+		await productsRepository.updateProduct(quantity, name);
 		return res.sendStatus(STATUS_CODE.OK);
 	} catch (error) {
 		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
 	}
 }
 
-async function deleteProduct(req: Request, res: Response) {
+async function deleteProduct(req: Request, res: Response): Promise<Response> {
 	const id: number = Number(req.params.id);
 	try {
-		const product = (await productsRepository.selectProductById(id)).rows[0] as ListProducts;
+		const product = (await productsRepository.selectProductById(id)).rows[0];
 		if (!product) {
 			return res.sendStatus(STATUS_CODE.NOT_FOUND);
 		}
