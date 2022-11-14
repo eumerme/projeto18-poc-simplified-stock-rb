@@ -232,4 +232,4 @@ Status: 200 OK
 
 ### - Response
 
-Status: 200 OK
+Status: 204 No Content
