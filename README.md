@@ -153,7 +153,7 @@ Status: 200 OK
 
 - All products: `GET /total-products-available`
 
-- Products by category: `GET /total-products-available?category=anel`
+- Products by category: `GET /total-products-available?category=colar`
 
 ### - Response
 
@@ -163,17 +163,17 @@ Status: 200 OK
 
 ```json
 {
-	"total": 2
+	"total": 42
 }
 ```
 
-- Products by category "anel":
+- Products by category "colar":
 
 Status: 200 OK
 
 ```json
 {
-	"total": 0
+	"total": 12
 }
 ```
 
@@ -193,7 +193,7 @@ Status: 200 OK
 
 ```json
 {
-	"total": 0
+	"total": 39
 }
 ```
 
@@ -203,7 +203,7 @@ Status: 200 OK
 
 ```json
 {
-	"total": 0
+	"total": 11
 }
 ```
 
