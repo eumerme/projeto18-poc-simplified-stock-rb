@@ -125,7 +125,7 @@ async function deleteProduct(req: Request, res: Response): Promise<Response> {
 		}
 
 		await productsRepository.deleteProductById(id);
-		return res.sendStatus(STATUS_CODE.OK);
+		return res.sendStatus(STATUS_CODE.NO_CONTENT);
 	} catch (error) {
 		return res.sendStatus(STATUS_CODE.SERVER_ERROR);
 	}
