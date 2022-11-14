@@ -109,30 +109,11 @@ Status: 200 OK
 ]
 ```
 
-## GET product
+## GET one product
 
 ### - Request
 
 `GET /product/:id`
-
-### - Response
-
-Status: 200 OK
-
-```json
-{
-	"id": 1,
-	"name": "borboleta",
-	"quantity": 1,
-	"category": "colar"
-}
-```
-
-## GET products
-
-### - Request
-
-`GET /products/:id`
 
 ### - Response
 
